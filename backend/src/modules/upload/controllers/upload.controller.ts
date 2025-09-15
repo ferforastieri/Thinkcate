@@ -1,0 +1,26 @@
+import { Controller, Post, UseInterceptors, UploadedFile, Body, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadService } from '../services/upload.service';
+import { multerConfig } from '../config/multer.config';
+
+@Controller('upload')
+export class UploadController {
+  constructor(private readonly uploadService: UploadService) {}
+
+  @Post('file')
+  @UseInterceptors(FileInterceptor('file', multerConfig))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    try {
+      await this.uploadService.validateFile(file);
+      const filePath = await this.uploadService.saveFile(file);
+      const fileInfo = this.uploadService.getFileInfo(file, filePath);
+      
+      return {
+        message: 'File uploaded successfully',
+        file: fileInfo,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+}
