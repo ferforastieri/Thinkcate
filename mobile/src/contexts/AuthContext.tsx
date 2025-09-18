@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authService } from '../services/auth/authService';
 
 interface User {
   id: number;
@@ -51,8 +52,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setIsLoading(true);
       
-      // Importar o serviço de autenticação
-      const { authService } = await import('../services/authService');
+      // Usar o serviço de autenticação
       const response = await authService.login({ email, password });
       
       // Salvar no AsyncStorage
@@ -72,8 +72,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setIsLoading(true);
       
-      // Importar o serviço de autenticação
-      const { authService } = await import('../services/authService');
+      // Usar o serviço de autenticação
       const response = await authService.register({ name, email, password });
       
       // Salvar no AsyncStorage
