@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EnvironmentModule } from './shared/environment/environment.module';
 import { DatabaseModule } from './shared/database/database.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { NotesModule } from './modules/notes/notes.module';
 import { FilesModule } from './modules/files/files.module';
 import { UploadModule } from './modules/upload/upload.module';
@@ -13,6 +14,7 @@ import { CalendarModule } from './modules/calendar/calendar.module';
   imports: [
     EnvironmentModule,
     DatabaseModule,
+    AuthModule,
     UploadModule,
     NotesModule,
     FilesModule,
