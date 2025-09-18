@@ -1,10 +1,11 @@
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { ConfigService } from '@nestjs/config';
 
-export const multerConfig: MulterOptions = {
+export const createMulterConfig = (configService: ConfigService): MulterOptions => ({
   storage: diskStorage({
-    destination: './data/uploads',
+    destination: configService.get<string>('UPLOAD_DIR', './data/uploads'),
     filename: (req, file, callback) => {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       const ext = extname(file.originalname);
@@ -27,6 +28,6 @@ export const multerConfig: MulterOptions = {
     }
   },
   limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB
+    fileSize: configService.get<number>('MAX_FILE_SIZE', 52428800), // 50MB default
   },
-};
+});

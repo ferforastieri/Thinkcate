@@ -1,10 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ConfigService } from '@nestjs/config';
 import { FilesService } from '../services/files.service';
 import { CreateFileDto } from '../dto/create-file.dto';
 import { UpdateFileDto } from '../dto/update-file.dto';
 import { UploadService } from '../../upload/services/upload.service';
-import { multerConfig } from '../../upload/config/multer.config';
+import { createMulterConfig } from '../../upload/config/multer.config';
 import { JwtAuthGuard } from '../../../shared/auth/guards/jwt-auth.guard';
 
 @Controller('files')
@@ -13,10 +14,11 @@ export class FilesController {
   constructor(
     private readonly filesService: FilesService,
     private readonly uploadService: UploadService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file', multerConfig))
+  @UseInterceptors(FileInterceptor('file', createMulterConfig(new ConfigService())))
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Body() createFileDto: CreateFileDto) {
     await this.uploadService.validateFile(file);
     const filePath = await this.uploadService.saveFile(file);
