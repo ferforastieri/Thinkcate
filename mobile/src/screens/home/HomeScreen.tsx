@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { notesService, Note } from '../../services/notes/notesService';
 import { calendarService, Event } from '../../services/calendar/calendarService';
+import Logo from '../../components/ui/Logo';
+
+const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const [recentNotes, setRecentNotes] = useState<Note[]>([]);
@@ -55,8 +58,7 @@ export default function HomeScreen() {
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Thinkcate</Text>
-        <Text style={styles.headerSubtitle}>Seu bloco de notas pessoal</Text>
+        <Logo />
       </View>
 
       {/* Stats Cards */}
@@ -143,25 +145,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F6F0',
   },
   header: {
-    backgroundColor: '#2C3E50', // Azul escuro como capa de caderno
-    padding: 20,
-    paddingTop: 50,
+    backgroundColor: '#2C3E50',
+    padding: width * 0.05,
+    paddingTop: height * 0.06,
+    paddingBottom: height * 0.03,
     borderBottomWidth: 3,
     borderBottomColor: '#34495E',
-  },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#ECF0F1',
-    textAlign: 'center',
-    fontFamily: 'serif',
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#BDC3C7',
-    marginTop: 5,
-    textAlign: 'center',
-    fontStyle: 'italic',
+    alignItems: 'center',
   },
   statsContainer: {
     flexDirection: 'row',

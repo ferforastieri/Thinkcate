@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { calendarService, Event } from '../../services/calendar/calendarService';
+import Logo from '../../components/ui/Logo';
+
+const { width, height } = Dimensions.get('window');
 
 export default function CalendarScreen() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -105,6 +108,11 @@ export default function CalendarScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Logo />
+      </View>
+      
       <FlatList
         data={events}
         renderItem={renderEvent}
@@ -129,26 +137,40 @@ export default function CalendarScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F8F6F0',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F8F6F0',
+  },
+  header: {
+    backgroundColor: '#2C3E50',
+    padding: width * 0.05,
+    paddingTop: height * 0.06,
+    paddingBottom: height * 0.03,
+    borderBottomWidth: 3,
+    borderBottomColor: '#34495E',
+    alignItems: 'center',
   },
   listContainer: {
-    padding: 16,
+    padding: width * 0.05,
   },
   eventCard: {
-    backgroundColor: 'white',
-    padding: 16,
+    backgroundColor: '#FFFFFF',
+    padding: width * 0.04,
     borderRadius: 12,
-    marginBottom: 12,
+    marginBottom: width * 0.03,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    borderLeftWidth: 4,
+    borderLeftColor: '#E74C3C',
   },
   eventHeader: {
     flexDirection: 'row',
@@ -171,16 +193,16 @@ const styles = StyleSheet.create({
     color: '#007AFF',
   },
   eventTitle: {
-    fontSize: 18,
+    fontSize: width * 0.045,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
+    color: '#2C3E50',
+    marginBottom: width * 0.02,
   },
   eventDescription: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: width * 0.035,
+    color: '#495057',
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: width * 0.03,
   },
   eventFooter: {
     flexDirection: 'row',

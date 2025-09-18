@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Dimensions, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../hooks/useToast';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
+import Logo from '../../components/ui/Logo';
 
 const { width, height } = Dimensions.get('window');
 
@@ -83,11 +83,7 @@ export default function RegisterScreen({ onBackToLogin }: RegisterScreenProps) {
           bounces={false}
         >
         <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Ionicons name="person-add" size={width * 0.12} color="#ECF0F1" />
-          </View>
-          <Text style={styles.title}>Criar Conta</Text>
-          <Text style={styles.subtitle}>Junte-se ao seu bloco de notas pessoal</Text>
+          <Logo />
         </View>
 
         <View style={styles.form}>
@@ -169,37 +165,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: height * 0.02, // 2% da altura da tela
-  },
-  logoContainer: {
-    width: width * 0.18, // 18% da largura da tela (menor)
-    height: width * 0.18, // Mantém proporção quadrada
-    borderRadius: width * 0.09, // Metade da largura para círculo perfeito
-    backgroundColor: '#27AE60',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: height * 0.015, // 1.5% da altura da tela
-    borderWidth: 3,
-    borderColor: '#2ECC71',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  title: {
-    fontSize: width * 0.07, // 7% da largura da tela (menor)
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginBottom: 6,
-    fontFamily: 'serif',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: width * 0.04, // 4% da largura da tela (menor)
-    color: '#6C757D',
-    textAlign: 'center',
-    fontStyle: 'italic',
-    paddingHorizontal: width * 0.05, // 5% de padding horizontal
   },
   form: {
     backgroundColor: '#FFFFFF',
