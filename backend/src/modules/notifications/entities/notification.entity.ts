@@ -54,13 +54,13 @@ export class Notification {
   })
   priority: NotificationPriority;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   scheduledFor: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   sentAt: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   readAt: Date;
 
   @Column({ default: false })
@@ -84,7 +84,7 @@ export class Notification {
   @Column({ length: 50, nullable: true })
   recurrencePattern: string; // daily, weekly, monthly, yearly
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   nextRecurrence: Date;
 
   @CreateDateColumn()

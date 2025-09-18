@@ -24,13 +24,13 @@ export class Event {
   @Column('text', { nullable: true })
   description: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   startDate: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   endDate: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   reminderDate: Date;
 
   @Column({

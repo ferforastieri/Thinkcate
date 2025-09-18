@@ -29,10 +29,10 @@ export class User {
   @Column({ length: 500, nullable: true })
   passwordResetToken: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   passwordResetExpires: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   lastLoginAt: Date;
 
   @CreateDateColumn()
