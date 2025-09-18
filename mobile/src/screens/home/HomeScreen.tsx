@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { notesService, Note } from '../services/notesService';
-import { calendarService, Event } from '../services/calendarService';
+import { notesService, Note } from '../../services/notes/notesService';
+import { calendarService, Event } from '../../services/calendar/calendarService';
 
 export default function HomeScreen() {
   const [recentNotes, setRecentNotes] = useState<Note[]>([]);

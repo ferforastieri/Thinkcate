@@ -7,10 +7,10 @@ import { useAuth } from '../contexts/AuthContext';
 
 // Screens
 import LoginScreen from '../screens/auth/LoginScreen';
-import HomeScreen from '../screens/HomeScreen';
-import NotesScreen from '../screens/NotesScreen';
-import CalendarScreen from '../screens/CalendarScreen';
-import FilesScreen from '../screens/FilesScreen';
+import HomeScreen from '../screens/home/HomeScreen';
+import NotesScreen from '../screens/notes/NotesScreen';
+import CalendarScreen from '../screens/calendar/CalendarScreen';
+import FilesScreen from '../screens/files/FilesScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

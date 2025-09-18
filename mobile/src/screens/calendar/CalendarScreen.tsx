@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { calendarService, Event } from '../services/calendarService';
+import { calendarService, Event } from '../../services/calendar/calendarService';
 
 export default function CalendarScreen() {
   const [events, setEvents] = useState<Event[]>([]);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { filesService, File } from '../services/filesService';
+import { filesService, File } from '../../services/files/filesService';
 
 export default function FilesScreen() {
   const [files, setFiles] = useState<File[]>([]);

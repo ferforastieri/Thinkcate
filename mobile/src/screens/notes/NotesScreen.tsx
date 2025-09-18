@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { notesService, Note } from '../services/notesService';
+import { notesService, Note } from '../../services/notes/notesService';
 
 export default function NotesScreen() {
   const [notes, setNotes] = useState<Note[]>([]);
