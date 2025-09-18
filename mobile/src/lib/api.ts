@@ -1,7 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_BASE_URL } from '@env';
 
-const API_BASE_URL = 'http://localhost:3000';
+console.log('API_BASE_URL:', API_BASE_URL);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -27,15 +28,25 @@ api.interceptors.request.use(
 
 // Interceptor para tratar respostas
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log('API Response:', response.config.url, response.status, response.data);
+    return response;
+  },
   async (error) => {
+    console.error('API Error:', {
+      url: error.config?.url,
+      method: error.config?.method,
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message
+    });
+    
     if (error.response?.status === 401) {
       // Token expirado ou inválido - limpar storage e redirecionar para login
       await AsyncStorage.removeItem('@thinkcate:user');
       await AsyncStorage.removeItem('@thinkcate:token');
       console.log('Token expirado, redirecionando para login');
     }
-    console.error('API Error:', error.response?.data || error.message);
     return Promise.reject(error);
   }
 );

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Dimensions
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/useToast';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import RegisterScreen from './RegisterScreen';
@@ -11,6 +12,7 @@ const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen() {
   const { login, isLoading } = useAuth();
+  const { showSuccess, showError } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -40,8 +42,9 @@ export default function LoginScreen() {
 
     try {
       await login(email, password);
+      showSuccess('Login realizado com sucesso!', 'Bem-vindo ao seu bloco de notas');
     } catch (error) {
-      Alert.alert('Erro', error instanceof Error ? error.message : 'Erro desconhecido');
+      showError('Erro no login', error instanceof Error ? error.message : 'Erro desconhecido');
     }
   };
 

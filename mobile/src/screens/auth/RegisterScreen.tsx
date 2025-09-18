@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Dimensions
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../hooks/useToast';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 
@@ -14,6 +15,7 @@ interface RegisterScreenProps {
 
 export default function RegisterScreen({ onBackToLogin }: RegisterScreenProps) {
   const { register, isLoading } = useAuth();
+  const { showSuccess, showError } = useToast();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,8 +58,9 @@ export default function RegisterScreen({ onBackToLogin }: RegisterScreenProps) {
 
     try {
       await register(name, email, password);
+      showSuccess('Conta criada com sucesso!', 'Agora você pode fazer login');
     } catch (error) {
-      Alert.alert('Erro', error instanceof Error ? error.message : 'Erro desconhecido');
+      showError('Erro ao criar conta', error instanceof Error ? error.message : 'Erro desconhecido');
     }
   };
 
