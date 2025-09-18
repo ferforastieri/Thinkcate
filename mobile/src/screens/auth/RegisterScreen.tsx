@@ -5,19 +5,29 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import RegisterScreen from './RegisterScreen';
 
 const { width, height } = Dimensions.get('window');
 
-export default function LoginScreen() {
-  const { login, isLoading } = useAuth();
+interface RegisterScreenProps {
+  onBackToLogin: () => void;
+}
+
+export default function RegisterScreen({ onBackToLogin }: RegisterScreenProps) {
+  const { register, isLoading } = useAuth();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [showRegister, setShowRegister] = useState(false);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
+
+    if (!name.trim()) {
+      newErrors.name = 'Nome é obrigatório';
+    } else if (name.trim().length < 2) {
+      newErrors.name = 'Nome deve ter pelo menos 2 caracteres';
+    }
 
     if (!email.trim()) {
       newErrors.email = 'Email é obrigatório';
@@ -31,31 +41,29 @@ export default function LoginScreen() {
       newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
     }
 
+    if (!confirmPassword.trim()) {
+      newErrors.confirmPassword = 'Confirmação de senha é obrigatória';
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'Senhas não coincidem';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     if (!validateForm()) return;
 
     try {
-      await login(email, password);
+      await register(name, email, password);
     } catch (error) {
       Alert.alert('Erro', error instanceof Error ? error.message : 'Erro desconhecido');
     }
   };
 
-  const handleRegister = () => {
-    setShowRegister(true);
-  };
-
   const handleBackToLogin = () => {
-    setShowRegister(false);
+    onBackToLogin();
   };
-
-  if (showRegister) {
-    return <RegisterScreen onBackToLogin={handleBackToLogin} />;
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,15 +81,24 @@ export default function LoginScreen() {
         >
         <View style={styles.header}>
           <View style={styles.logoContainer}>
-            <Ionicons name="document-text" size={width * 0.12} color="#ECF0F1" />
+            <Ionicons name="person-add" size={width * 0.12} color="#ECF0F1" />
           </View>
-          <Text style={styles.title}>Thinkcate</Text>
-          <Text style={styles.subtitle}>Seu bloco de notas pessoal</Text>
+          <Text style={styles.title}>Criar Conta</Text>
+          <Text style={styles.subtitle}>Junte-se ao seu bloco de notas pessoal</Text>
         </View>
 
         <View style={styles.form}>
-          <Text style={styles.formTitle}>Entrar</Text>
+          <Text style={styles.formTitle}>Registrar</Text>
           
+          <Input
+            label="Nome Completo"
+            placeholder="Digite seu nome completo"
+            value={name}
+            onChangeText={setName}
+            autoCapitalize="words"
+            error={errors.name}
+          />
+
           <Input
             label="Email"
             placeholder="Digite seu email"
@@ -101,22 +118,27 @@ export default function LoginScreen() {
             error={errors.password}
           />
 
-          <Button
-            title="Entrar"
-            onPress={handleLogin}
-            loading={isLoading}
-            style={styles.loginButton}
+          <Input
+            label="Confirmar Senha"
+            placeholder="Confirme sua senha"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            error={errors.confirmPassword}
           />
 
-          <TouchableOpacity style={styles.forgotPassword}>
-            <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
-          </TouchableOpacity>
+          <Button
+            title="Criar Conta"
+            onPress={handleRegister}
+            loading={isLoading}
+            style={styles.registerButton}
+          />
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Não tem uma conta?</Text>
-          <TouchableOpacity onPress={handleRegister}>
-            <Text style={styles.registerText}>Criar conta</Text>
+          <Text style={styles.footerText}>Já tem uma conta?</Text>
+          <TouchableOpacity onPress={handleBackToLogin}>
+            <Text style={styles.loginText}>Fazer login</Text>
           </TouchableOpacity>
         </View>
         </ScrollView>
@@ -143,18 +165,18 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: height * 0.04, // 4% da altura da tela
+    marginBottom: height * 0.02, // 2% da altura da tela
   },
   logoContainer: {
-    width: width * 0.22, // 22% da largura da tela
-    height: width * 0.22, // Mantém proporção quadrada
-    borderRadius: width * 0.11, // Metade da largura para círculo perfeito
-    backgroundColor: '#2C3E50',
+    width: width * 0.18, // 18% da largura da tela (menor)
+    height: width * 0.18, // Mantém proporção quadrada
+    borderRadius: width * 0.09, // Metade da largura para círculo perfeito
+    backgroundColor: '#27AE60',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: height * 0.02, // 2% da altura da tela
+    marginBottom: height * 0.015, // 1.5% da altura da tela
     borderWidth: 3,
-    borderColor: '#34495E',
+    borderColor: '#2ECC71',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -162,15 +184,15 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   title: {
-    fontSize: width * 0.08, // 8% da largura da tela
+    fontSize: width * 0.07, // 7% da largura da tela (menor)
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 8,
+    marginBottom: 6,
     fontFamily: 'serif',
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: width * 0.045, // 4.5% da largura da tela
+    fontSize: width * 0.04, // 4% da largura da tela (menor)
     color: '#6C757D',
     textAlign: 'center',
     fontStyle: 'italic',
@@ -179,7 +201,7 @@ const styles = StyleSheet.create({
   form: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    padding: width * 0.07, // 7% da largura da tela
+    padding: width * 0.05, // 5% da largura da tela (menor)
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -187,37 +209,28 @@ const styles = StyleSheet.create({
     elevation: 6,
     borderWidth: 1,
     borderColor: '#E8E8E8',
-    marginBottom: height * 0.02, // 2% da altura da tela
+    marginBottom: height * 0.015, // 1.5% da altura da tela
   },
   formTitle: {
-    fontSize: width * 0.07, // 7% da largura da tela
+    fontSize: width * 0.06, // 6% da largura da tela (menor)
     fontWeight: 'bold',
     color: '#2C3E50',
     textAlign: 'center',
-    marginBottom: height * 0.03, // 3% da altura da tela
+    marginBottom: height * 0.02, // 2% da altura da tela (menor)
     borderBottomWidth: 2,
-    borderBottomColor: '#3498DB',
-    paddingBottom: 8,
+    borderBottomColor: '#27AE60',
+    paddingBottom: 6,
   },
-  loginButton: {
+  registerButton: {
     marginTop: 12,
-  },
-  forgotPassword: {
-    alignItems: 'center',
-    marginTop: height * 0.02, // 2% da altura da tela
-  },
-  forgotPasswordText: {
-    fontSize: width * 0.04, // 4% da largura da tela
-    color: '#3498DB',
-    fontWeight: '500',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: height * 0.02, // 2% da altura da tela
+    marginTop: height * 0.015, // 1.5% da altura da tela
     backgroundColor: '#FFFFFF',
-    padding: width * 0.04, // 4% da largura da tela
+    padding: width * 0.03, // 3% da largura da tela (menor)
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E8E8E8',
@@ -227,7 +240,7 @@ const styles = StyleSheet.create({
     color: '#6C757D',
     marginRight: 6,
   },
-  registerText: {
+  loginText: {
     fontSize: width * 0.04, // 4% da largura da tela
     color: '#3498DB',
     fontWeight: 'bold',
